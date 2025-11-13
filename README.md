@@ -1,1 +1,1 @@
-# big-quantum-hackathon-qatar-2025
+# Team 1 - Oryqs - Qatar Development Bank x IBM
