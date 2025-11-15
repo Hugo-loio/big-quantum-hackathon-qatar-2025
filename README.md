@@ -1,6 +1,6 @@
 # Team 1 - Oryqs - Qatar Development Bank x IBM
 
-Our use case involves solving a problem of *portfolio optimization*, i.e. given a set of assets, decide which ones to buy or short.
+Our use case involves solving a problem of **portfolio optimization**, i.e. given a set of assets, decide which ones to buy or short.
 The problem is formulated clearly in the file `notes.pdf`.
 
 We were inspired by the work
