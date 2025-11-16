@@ -8,7 +8,3 @@ We were inspired by the work
 **N. Slate, E. Matwiejew, S. Marsh, and J. B. Wang,
 Quantum 5, 513 (2021), 
 DOI: https://doi.org/10.22331/q-2021-07-28-513**
-
-Our solution involves:
-
-1. TODO
