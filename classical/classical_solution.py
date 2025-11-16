@@ -1,11 +1,40 @@
 import numpy as np
 from itertools import product
 
-def objective_function(pos):
+import matplotlib.pyplot as plt
+
+import time
+
+def objective_function(pos, cov, rs):
     return ra * (pos @ cov @ pos) - (1 - ra) * pos @ rs
     
 
-dataset = 2
+def find_extremes(cov, rs):
+    n = len(rs)
+
+    minval = 0
+    minpos = np.array([0]*n)
+
+    maxval = 0
+    maxpos = np.array([0]*n)
+
+    for x in product([-1, 0, 1], repeat=n):
+        pos = np.array(x)
+        if(np.sum(pos) != A):
+            continue
+
+        o = objective_function(pos, cov, rs)
+        if(o < minval):
+            minval = o
+            minpos = pos
+
+        if(o > maxval):
+            maxval = o
+            maxpos = pos
+
+    return minval, minpos, maxval, maxpos
+
+dataset = 1
 ra = 0.5 # risk avertion
 A = 0 # Market confidence
 possible_pos = [-1,0,1]
@@ -13,23 +42,29 @@ possible_pos = [-1,0,1]
 cov = np.loadtxt("processed_datasets/cov_" + str(dataset) + ".csv", delimiter=',')
 rs = np.loadtxt("processed_datasets/returns_" + str(dataset) + ".csv", delimiter=',')
 
-max_n = 10
-cov = cov[:max_n, :max_n]
-rs = rs[:max_n]
+energies = []
+times = []
 
-n = len(rs)
-minval = 0
-minpos = np.array([0]*n)
+ns = np.arange(2,11)
 
-for x in product([-1, 0, 1], repeat=n):
-    pos = np.array(x)
-    if(np.sum(pos) != A):
-        continue
+for n in ns:
+    cov2 = cov[:n, :n]
+    rs2 = rs[:n]
+    start = time.perf_counter()
+    minval, minpos, maxval, maxpos =  find_extremes(cov2, rs2)
+    print(minval, maxval, n)
+    end = time.perf_counter()
+    times.append(end-start)
 
-    o = objective_function(pos)
-    if(o < minval):
-        minval = o
-        minpos = pos
+plt.figure(figsize=(4,3))
+plt.plot(ns, times, marker = 'o', label = 'Classical time')
 
-print(minval, minpos)
-    
+ns2 = [4,6,8,10]
+depth  = np.array([196, 392, 660, 1000])/10000
+plt.plot(ns2, depth, marker = 'o', label = 'Circuit depth')
+
+#plt.plot([10], [2], marker = 'o', label = 'Circuit depth')
+
+plt.xlabel("Asset number")
+plt.legend()
+plt.savefig("time.pdf", bbox_inches='tight') 
